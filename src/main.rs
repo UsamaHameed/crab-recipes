@@ -1,16 +1,16 @@
-use std::fmt;
+use std::{env, fmt, io};
 
 // #[derive(Debug)]
 struct Recipe {
     name: String,
-    id: u32,
+    id: usize,
     description: String,
     // ingredients
 }
 
 impl fmt::Display for Recipe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Name: {}\nId: {}\nDescription: {}", self.name, self.id, self.description)
+        write!(f, "Name: {} id: {} Description: {}", self.name, self.id, self.description)
     }
 }
 
@@ -25,9 +25,69 @@ fn main() {
             description: String::from("haha") 
         }
     );
+
+    loop {
+        let mut option = String::new();
+
+        println!("Options: ");
+        println!("List all recipes: l");
+        println!("Add a new recipe: a");
+        println!("Edit a recipe: e");
+        println!("Remove a recipe: r");
+
+        io::stdin()
+            .read_line(&mut option)
+            .expect("Unable to parse entered text");
+
+        match option.trim() {
+            "l" => { print_recipes(&recipes); },
+            "a" => { add_recipe_info(&mut recipes); },
+            "e" => {()},
+            "r" => {()},
+            _ => {}
+        }
+    }
+}
+
+fn add_recipe_info(recipes: &mut Vec<Recipe>) -> &mut Vec<Recipe> {
+    let mut input1: String = String::new();
+    let mut input2: String = String::new();
+    let id = recipes.len() + 1;
+
+    println!("Enter the name:");
     
-    // display recipes
+    io::stdin()
+        .read_line(&mut input1)
+        .expect("Failed to read input");
+    
+    println!("Enter the description:");
+
+    io::stdin()
+        .read_line(&mut input2)
+        .expect("Failed to read input");
+
+    recipes.push(Recipe {
+        id,
+        name: input1.trim().to_string(),
+        description: input2.trim().to_string(),
+    });
+
+    recipes
+}
+
+// fn remove_recipe(recipes: &Vec<Recipe>, name: String) -> Vec<Recipe> {
+//     let mut name = String::new();
+
+//     recipes.iter_mut()
+//         .filter(|recipe| recipe.name == name).collect()
+    
+//     // recipes
+
+// }
+
+fn print_recipes(recipes: &Vec<Recipe>) {
+    println!("\n");
     for recipe in recipes {
-        println!("{}", recipe);
+        println!("{}\n", recipe);
     }
 }
