@@ -1,4 +1,4 @@
-use std::{collections::HashMap, env, fmt, io};
+use std::{collections::HashMap, env, fmt, io, process};
 
 type Recipes = HashMap<usize, Recipe>;
 
@@ -43,6 +43,19 @@ fn main() {
             "e" => {()},
             "r" => {()},
             _ => {}
+        }
+
+        let mut option2: String = String::new();
+        println!("What now?");
+        println!("Press any button to see options again!");
+        println!("To exit: Press x");
+
+        io::stdin()
+            .read_line(&mut option2)
+            .expect("Unable to parse entered text");
+
+        if option2.trim() == "x" {
+            break;
         }
     }
 }
