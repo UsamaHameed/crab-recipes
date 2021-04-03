@@ -1,4 +1,4 @@
-use std::{collections::HashMap, env, fmt, io, process};
+use std::{collections::HashMap, env, fmt, io, process, usize};
 
 type Recipes = HashMap<usize, Recipe>;
 
@@ -41,7 +41,7 @@ fn main() {
             "l" => { print_recipes(&recipes); },
             "a" => { add_recipe_info(&mut recipes); },
             "e" => {()},
-            "r" => {()},
+            "r" => { remove_recipe(&mut recipes); },
             _ => {}
         }
 
@@ -83,15 +83,25 @@ fn add_recipe_info(recipes: &mut Recipes)  {
     });
 }
 
-// fn remove_recipe(recipes: &Vec<Recipe>, name: String) -> Vec<Recipe> {
-//     let mut name = String::new();
+fn remove_recipe(recipes: &mut Recipes) {
+    let mut id: String = String::new();
 
-//     recipes.iter_mut()
-//         .filter(|recipe| recipe.name == name).collect()
+    loop {
+        println!("Enter id to remove: ");
     
-//     // recipes
-
-// }
+        io::stdin()
+            .read_line(&mut id)
+            .expect("Failed to read input");
+        
+        match id.trim().parse::<u32>() {
+            Ok(x) => { 
+                recipes.remove(&(x as usize));
+                break;
+            },
+            Err(_) => { println!("Please enter a valid id..."); }
+        }
+    }
+}
 
 fn print_recipes(recipes: &Recipes) {
     println!("\n");
