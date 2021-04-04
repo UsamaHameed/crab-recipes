@@ -32,7 +32,7 @@ fn main() {
         println!("Add a new recipe: a");
         println!("Edit a recipe: e");
         println!("Remove a recipe: r");
-        take_input(option);
+        take_input(&mut option, None, None);
 
         match option.trim() {
             "l" => { print_recipes(&recipes); },
@@ -46,7 +46,7 @@ fn main() {
         println!("What now?");
         println!("Press any button to see options again!");
         println!("To exit: Press x");
-        take_input(option2);
+        take_input(&mut option2, None, None);
 
         if option2.trim() == "x" {
             break;
