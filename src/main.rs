@@ -1,4 +1,4 @@
-use std::{collections::HashMap, env, fmt, io, process, usize};
+use std::{collections::HashMap, fmt, io, usize};
 
 type Recipes = HashMap<usize, Recipe>;
 
@@ -32,10 +32,7 @@ fn main() {
         println!("Add a new recipe: a");
         println!("Edit a recipe: e");
         println!("Remove a recipe: r");
-
-        io::stdin()
-            .read_line(&mut option)
-            .expect("Unable to parse entered text");
+        take_input(option);
 
         match option.trim() {
             "l" => { print_recipes(&recipes); },
@@ -49,10 +46,7 @@ fn main() {
         println!("What now?");
         println!("Press any button to see options again!");
         println!("To exit: Press x");
-
-        io::stdin()
-            .read_line(&mut option2)
-            .expect("Unable to parse entered text");
+        take_input(option2);
 
         if option2.trim() == "x" {
             break;
@@ -108,5 +102,28 @@ fn print_recipes(recipes: &Recipes) {
     for (id, recipe) in recipes {
         print!("id: {} ", id);
         println!("{}\n", recipe);
+    }
+}
+
+fn take_input(
+    buffer: &mut String, prompt_message: Option<&str>, error_message: Option<&str>
+) {
+    while buffer.is_empty() {
+        let prompt_message = match prompt_message {
+            Some(x) => x,
+            None => "Please enter some text",
+        };
+        
+        let error_message = match error_message {
+            Some(x) => x,
+            None => "Failed to parse text...\nPlease try again!",
+        };
+        
+    
+        println!("{}", prompt_message);
+    
+        io::stdin()
+            .read_line(buffer)
+            .expect(error_message);
     }
 }
