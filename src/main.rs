@@ -1,6 +1,7 @@
 use std::{collections::HashMap, fmt, io, usize};
 
-type Recipes = HashMap<usize, Recipe>;
+type Id = usize;
+type Recipes = HashMap<Id, Recipe>;
 
 struct Recipe {
     name: String,
@@ -24,33 +25,37 @@ fn main() {
     });
 
 
-    loop {
+    let mut option2: String = String::new();
+
+    while option2.trim() != "x" {
         let mut option = String::new();
 
-        println!("Options: ");
-        println!("List all recipes: l");
-        println!("Add a new recipe: a");
-        println!("Edit a recipe: e");
-        take_input(&mut option, Some("Remove a recipe: r"), None);
+        let prompt = Some(
+"Options: \n
+List all recipes: l\n
+Add a new recipe: a\n
+Edit a recipe: e\n
+Remove a recipe: r"
+        );
+        
+        take_input(&mut option, prompt, None);
 
         match option.trim() {
             "l" => { print_recipes(&recipes); },
             "a" => { add_recipe_info(&mut recipes); },
             "e" => {()},
             "r" => { remove_recipe(&mut recipes); },
-            _ => {}
+            other => { 
+                println!("invalid option: {}", other);
+                continue; 
+            }
         }
 
-        let mut option2: String = String::new();
-        println!("What now?");
-        println!("Press any button to see options again!");
-        take_input(&mut option2, Some("To exit: Press x"), None);
-
-        if option2.trim() == "x" {
-            break;
-        }
+        prompt_exit(&mut option2);
     }
 }
+
+
 
 fn add_recipe_info(recipes: &mut Recipes)  {
     let mut input1: String = String::new();
@@ -93,7 +98,7 @@ fn print_recipes(recipes: &Recipes) {
 fn take_input(
     buffer: &mut String, prompt_message: Option<&str>, error_message: Option<&str>
 ) {
-    while buffer.is_empty() {
+    while buffer.trim().is_empty() {
         let prompt_message = match prompt_message {
             Some(x) => x,
             None => "Please enter some text",
@@ -110,4 +115,10 @@ fn take_input(
             .read_line(buffer)
             .expect(error_message);
     }
+}
+
+fn prompt_exit(buffer: &mut String) {
+    println!("What now?");
+    println!("Press any button to see options again!");
+    take_input(buffer, Some("To exit: Press x"), None);
 }
