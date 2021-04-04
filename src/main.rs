@@ -25,7 +25,7 @@ fn main() {
     });
 
 
-    let mut option2: String = String::new();
+    let mut option2 = String::new();
 
     while option2.trim() != "x" {
         let mut option = String::new();
@@ -58,8 +58,8 @@ Remove a recipe: r"
 
 
 fn add_recipe_info(recipes: &mut Recipes)  {
-    let mut input1: String = String::new();
-    let mut input2: String = String::new();
+    let mut input1 = String::new();
+    let mut input2 = String::new();
     let id = recipes.len() + 1;
     
     take_input(&mut input1, Some("Enter the name: "), None);
@@ -72,7 +72,7 @@ fn add_recipe_info(recipes: &mut Recipes)  {
 }
 
 fn remove_recipe(recipes: &mut Recipes) {
-    let mut id: String = String::new();
+    let mut id = String::new();
 
     loop {
         take_input(&mut id, Some("Enter id to remove: "), None);
