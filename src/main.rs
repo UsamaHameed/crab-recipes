@@ -31,8 +31,7 @@ fn main() {
         println!("List all recipes: l");
         println!("Add a new recipe: a");
         println!("Edit a recipe: e");
-        println!("Remove a recipe: r");
-        take_input(&mut option, None, None);
+        take_input(&mut option, Some("Remove a recipe: r"), None);
 
         match option.trim() {
             "l" => { print_recipes(&recipes); },
@@ -45,8 +44,7 @@ fn main() {
         let mut option2: String = String::new();
         println!("What now?");
         println!("Press any button to see options again!");
-        println!("To exit: Press x");
-        take_input(&mut option2, None, None);
+        take_input(&mut option2, Some("To exit: Press x"), None);
 
         if option2.trim() == "x" {
             break;
@@ -58,18 +56,9 @@ fn add_recipe_info(recipes: &mut Recipes)  {
     let mut input1: String = String::new();
     let mut input2: String = String::new();
     let id = recipes.len() + 1;
-
-    println!("Enter the name:");
     
-    io::stdin()
-        .read_line(&mut input1)
-        .expect("Failed to read input");
-    
-    println!("Enter the description:");
-
-    io::stdin()
-        .read_line(&mut input2)
-        .expect("Failed to read input");
+    take_input(&mut input1, Some("Enter the name: "), None);
+    take_input(&mut input2, Some("Enter the description: "), None);
 
     recipes.insert(id, Recipe {
         name: input1.trim().to_string(),
@@ -81,11 +70,7 @@ fn remove_recipe(recipes: &mut Recipes) {
     let mut id: String = String::new();
 
     loop {
-        println!("Enter id to remove: ");
-    
-        io::stdin()
-            .read_line(&mut id)
-            .expect("Failed to read input");
+        take_input(&mut id, Some("Enter id to remove: "), None);
         
         match id.trim().parse::<u32>() {
             Ok(x) => { 
@@ -119,7 +104,6 @@ fn take_input(
             None => "Failed to parse text...\nPlease try again!",
         };
         
-    
         println!("{}", prompt_message);
     
         io::stdin()
