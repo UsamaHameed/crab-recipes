@@ -29,7 +29,7 @@ Remove a recipe: r"
         match option.trim() {
             "l" => { recipes.print_all(); },
             "a" => { recipes.add_recipe_info(); },
-            "e" => {()},
+            "e" => { recipes.edit_recipe() },
             "r" => { recipes.remove_recipe(); },
             other => { 
                 println!("invalid option: {}", other);
