@@ -1,15 +1,16 @@
-use std::{collections::HashMap};
-use crab_recipes::{Recipes, Recipe, take_input, prompt_exit, RecipeFns };
+mod app;
+mod recipes;
+use app::{AppFns, App};
+use recipes::RecipeFns;
 
 fn main() {
-    // store recipes
-    let mut recipes: Recipes = HashMap::new();
+    let app = App::new();
+    // app.recipes.add_recipe();
 
-    recipes.insert(1, Recipe { 
-        name: String::from("crabs"), 
-        description: String::from("haha") 
-    });
-
+    // app.recipes.insert(1, Recipe { 
+    //     name: String::from("crabs"), 
+    //     description: String::from("haha") 
+    // });
 
     let mut option2 = String::new();
 
@@ -24,19 +25,19 @@ Edit a recipe: e\n
 Remove a recipe: r"
         );
         
-        take_input(&mut option, prompt, None);
+        // take_input(&mut option, prompt, None);
 
-        match option.trim() {
-            "l" => { recipes.print_all(); },
-            "a" => { recipes.add_recipe_info(); },
-            "e" => { recipes.edit_recipe() },
-            "r" => { recipes.remove_recipe(); },
-            other => { 
-                println!("invalid option: {}", other);
-                continue; 
-            }
-        }
+        // match option.trim() {
+        //     "l" => { recipes.print_all(); },
+        //     "a" => { recipes.add_recipe_info(); },
+        //     "e" => { recipes.edit_recipe() },
+        //     "r" => { recipes.remove_recipe(); },
+        //     other => { 
+        //         println!("invalid option: {}", other);
+        //         continue; 
+        //     }
+        // }
 
-        prompt_exit(&mut option2);
+        // prompt_exit(&mut option2);
     }
 }
