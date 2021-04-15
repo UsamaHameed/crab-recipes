@@ -1,29 +1,130 @@
 use std::{collections::HashMap, process, io};
-use super::super::recipes::Recipes;
+use super::super::recipes::{Recipe, Recipes, RecipeFns};
 
 pub struct App {
-	pub recipes: Recipes
+	pub recipes: Recipes,
 }
 
-pub trait AppFns {
-	fn new() -> App;
-	fn take_input(
-		buffer: &mut String, 
-		prompt_message: Option<&str>, 
-		error_message: Option<&str>
-	);
-	fn prompt_exit(buffer: &mut String);
-	fn exit();
-}
-
-impl AppFns for App {
-	fn new() -> App {
+impl App {
+	pub fn new() -> Self {
 		App {
 			recipes: HashMap::new()
 		}
 	}
 
-	fn take_input(buffer: &mut String, 
+	pub fn listen(&mut self) {
+		let mut exit_flag = String::new();
+
+		while exit_flag.trim() != "x" {
+			let mut option = String::new();
+			let prompt = Some(
+"Options: \n
+List all recipes: l\n
+Add a new recipe: a\n
+Edit a recipe: e\n
+Remove a recipe: r"
+			);
+						
+			self.take_input(&mut option, prompt, None);
+		
+			match option.trim() {
+				"l" => { self.recipes.print_all(); },
+				"a" => { self.prompt_add_recipe(); },
+				"e" => { self.prompt_edit_recipe() },
+				"r" => { self.prompt_remove_recipe(); },
+				other => { 
+					println!("invalid option: {}", other);
+					continue; 
+				}
+			}
+	
+			self.prompt_exit(&mut exit_flag);
+		}
+	}
+
+	fn prompt_add_recipe(&mut self) {
+		let mut name = String::new();
+		let mut description = String::new();
+
+		self.take_input(
+			&mut name, 
+			Some("Please enter the name: "), 
+			None
+		);
+
+		self.take_input(
+			&mut description, 
+			Some("Please enter the description: "), 
+			None
+		);
+
+		self.recipes.add_recipe(Recipe { 
+			name, description
+		});
+	}
+
+	fn prompt_edit_recipe(&mut self) {
+		let mut id = String::new();
+		let mut name = String::new();
+		let mut description = String::new();
+
+		self.take_input(
+			&mut id, 
+			Some("Please enter the id to of the recipe to edit: "), 
+			None
+		);
+
+		self.take_input(
+			&mut name, 
+			Some("Please enter name: "), 
+			None
+		);
+
+		self.take_input(
+			&mut description, 
+			Some("Please enter the description: "), 
+			None
+		);
+
+		self.recipes.remove_recipe(id.as_str());
+		self.recipes.add_recipe(Recipe { 
+			name, description
+		});
+	}
+
+	fn prompt_remove_recipe(&mut self) {
+		let mut id = String::new();
+
+		self.take_input(
+			&mut id, 
+			Some("Please enter the id to remove: "), 
+			None
+		);
+
+		self.recipes.remove_recipe(id.as_str());
+	}
+
+	fn prompt_exit(&mut self, buffer: &mut String) {
+		let prompt = Some(
+			"Press any button to see options again!\n
+To exit: Press x\n"
+		);
+		
+		self.take_input(buffer, prompt, None);
+
+		match buffer.trim() {
+			"x" => { 
+				self.exit(); 
+			},
+			_ => { 
+				self.listen(); 
+			}
+		}
+	}
+
+	fn take_input(
+		&self,
+		buffer: &mut String, 
 		prompt_message: Option<&str>, 
 		error_message: Option<&str>
 	) {
@@ -46,16 +147,7 @@ impl AppFns for App {
 		}
 	}
 
-	fn prompt_exit(buffer: &mut String) {
-		let prompt = Some(
-			"Press any button to see options again!\n
-			To exit: Press x\n"
-		);
-		
-		App::take_input(buffer, prompt, None);
-	}
-
-	fn exit() {
+	fn exit(&self) {
 		process::exit(1);
 	}
 }
