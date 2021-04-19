@@ -1,5 +1,5 @@
 use std::{collections::HashMap, process, io};
-use super::super::recipes::{Recipe, Recipes, RecipeFns};
+use crate::recipes::{Recipe, Recipes, RecipeFns};
 
 pub struct App {
 	pub recipes: Recipes,
