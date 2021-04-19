@@ -2,6 +2,7 @@ use std::{collections::HashMap, fmt, usize};
 
 type Id = usize;
 pub type  Recipes = HashMap<Id, Recipe>;
+
 pub struct Recipe {
     pub name: String,
     pub description: String,
@@ -54,7 +55,42 @@ impl RecipeFns for Recipes {
         println!("\n");
         for (id, recipe) in self {
             print!("id: {} ", id);
-            println!("{}\n", recipe);
+            println!("\n{}\n", recipe);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn add_recipe() {
+        let mut recipes = Recipes::new();
+        recipes.add_recipe(Recipe { name: String::from("name"), description: String::from("description")} );
+        assert_eq!(recipes.len(), 1);
+        assert_eq!(recipes.get(&1).unwrap().description, "description");
+        assert_eq!(recipes.get(&1).unwrap().name, "name");
+    }
+
+    #[test]
+    fn remove_recipe() {
+        let mut recipes = Recipes::new();
+        recipes.add_recipe(Recipe { name: String::from("name"), description: String::from("description")} );
+        assert_eq!(recipes.len(), 1);
+        recipes.remove_recipe(&"1");
+
+        assert_eq!(recipes.len(), 0);
+    }
+
+    #[test]
+    fn edit_recipe() {
+        let mut recipes = Recipes::new();
+        recipes.add_recipe(Recipe { name: String::from("name"), description: String::from("description")} );
+        recipes.edit_recipe(&"1", Recipe { name: String::from("new name"), description: String::from("new description")});
+        assert_eq!(recipes.len(), 1);
+        assert_eq!(recipes.get(&1).unwrap().description, "new description");
+        assert_eq!(recipes.get(&1).unwrap().name, "new name");
     }
 }
